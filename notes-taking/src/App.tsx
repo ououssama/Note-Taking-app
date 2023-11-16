@@ -25,7 +25,8 @@ export default function App() {
 
     return (
       <div className="flex w-full h-full">
-        <form onSubmit={handleSubmit} className="form flex flex-col gap-4 p-6">
+        <div className="flex flex-col">
+        <form onSubmit={handleSubmit} className="form flex flex-col h-full gap-4 p-6">
           <div className="flex flex-col">
             <input className="rounded-md py-3 px-4 box-border border-[1px] border-gray-600 focus:outline focus:border-none focus:outline-blue-500 transition-all ease-in-out" type="text" name="title" id="title" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} />
           </div>
@@ -34,8 +35,9 @@ export default function App() {
           </div>
           <button type="submit" className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 focus:outline-0 transition-all ease-in-out">Add Note</button>
         </form>
-
-        <div className="bg-[#2a2a2a] h-full w-full p-6 rounded-s-2xl">
+          <span className="self-center justify-items-stretch pb-3 text-gray-600">Made with ❤️ by me</span>
+          </div>
+        <div className="bg-[#2a2a2a] w-full p-6 rounded-s-2xl h-screen overflow-auto">
           <div className="flex items-start justify-start w-full flex-wrap relative gap-4">
             <notesContext.Provider value={{ notes, setNotes }}>
               <Notes/>

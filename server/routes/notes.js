@@ -16,6 +16,7 @@ const addNote = (async (req, res) => {
     try {
 
         const newNote = new Note({
+            uid: req.body.uid,
             title: req.body.title,
             content: req.body.content
         })

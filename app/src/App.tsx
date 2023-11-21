@@ -3,7 +3,7 @@ import Notes from "./Components/notesComponent"
 import { NotesContextProps, notesContext } from "./Features/Context/notesContext"
 
 export interface Note {
-      id: number,
+      uid: string,
       title: string,
       content: string
 }
@@ -11,15 +11,29 @@ export interface Note {
 export default function App() {
   const [title, setTitle] = useState<string>('')
   const [content, setContent] = useState<string>('')
-  const {notes, setNotes } = useContext<NotesContextProps>(notesContext)
+  const { notes, setNotes } = useContext<NotesContextProps>(notesContext)
   
   const handleSubmit = (e: React.FormEvent): void => {
     e.preventDefault()
-    const noteId: number = (notes && notes[notes?.length - 1]?.id) ?? 0
+    // const noteId: number = (notes && notes[notes?.length - 1]?.id) ?? 0
+    const curDate: Date = new Date();
     
-    setNotes((prevNotes : Note[]) => { return [...prevNotes, {id: noteId + 1, title: title, content: content}]});
+    setNotes((prevNotes: Note[]) => { return [...prevNotes, {  uid: 'NT-'+ Math.floor(curDate.getTime() / 1000), title: title, content: content }] });
+    
+    
       
-      setTitle('');
+    fetch('http://localhost:3000/add-note', {
+      method: 'post',
+      headers: {
+        "content-type": 'application/json',
+        "Access-Control-Allow-Origin": "*"
+      },
+      body: JSON.stringify({ uid: 'NT-'+ Math.floor(curDate.getTime() / 1000), title: title, content: content})
+    })
+      .then(res => console.log({ message: 'Notes has been added!', payload: res }))
+      .catch(err => console.log({ message: 'Error while adding note', payload: err }))
+    
+    setTitle('');
     setContent('')
     }
 

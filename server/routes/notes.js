@@ -22,7 +22,8 @@ const addNote = (async (req, res) => {
         })
 
         await newNote.save()
-        res.status(201).json({'Message': 'New Note has been added!'})
+        console.log(newNote);
+        res.status(201).json({'Message': 'New Note has been added!', 'payload': newNote})
 
     } catch (error) {
         console.error('Error adding note:', error);

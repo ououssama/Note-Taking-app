@@ -5,12 +5,12 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node index.js",
+    "start": "node -r dotenv/config index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint .",
     "format": "prettier --single-quote --check .",
     "prepare": "cd ../ && husky install server/.husky",
-    "dev": "nodemon --experimental-modules index.js"
+    "dev": "nodemon -r dotenv/config --experimental-modules index.js"
   },
   "author": "",
   "license": "ISC",

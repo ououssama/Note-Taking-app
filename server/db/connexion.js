@@ -1,6 +1,6 @@
 // import { MongoClient } from 'mongodb';
+// require('dotenv').config();
 import mongoose from 'mongoose';
-import '../loadEnv.js'
 
 const CONNECTION_URI = process.env.MONGODB_URI || ''
 mongoose.set("strictQuery", false);

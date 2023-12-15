@@ -1,6 +1,5 @@
 import express from 'express'
 import cors from 'cors'
-import './loadEnv.js'
 import './db/connexion.js';
 import { getNotes, addNote, deleteNote } from './routes/notes.js';
 

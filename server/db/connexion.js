@@ -8,5 +8,5 @@ mongoose.set("strictQuery", false);
 try {
     await mongoose.connect(CONNECTION_URI)
 } catch(e) {
-    console.log(e);
+    new Error('Database Connection :' + e)
 }

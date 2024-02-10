@@ -22,7 +22,7 @@ const addNote = (async (req, res) => {
         })
 
         await newNote.save()
-        console.log(newNote);
+        // console.log(newNote);
         res.status(201).json({'Message': 'New Note has been added!', 'payload': newNote})
 
     } catch (error) {
@@ -33,7 +33,7 @@ const addNote = (async (req, res) => {
 
 const deleteNote = (async (req, res) => {
     try {
-        console.log(req.query.uid);
+        // console.log(req.query.uid);
         const deletedNote = await Note.deleteOne({_id: ObjectId(req.query.uid)})
         res.status(200).json({'Message': 'Note has been deleted! '+ deletedNote.deletedCount})
     } catch (error) {

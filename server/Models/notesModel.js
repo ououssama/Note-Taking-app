@@ -9,7 +9,8 @@ const noteSchema = new Schema({
         index: true,
     },
     title: "string",
-    content: "string"
+    content: "string",
+    colorId: "Number"
 })
 
 // noteSchema.index({ id: 1 });

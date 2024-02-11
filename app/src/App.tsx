@@ -10,6 +10,7 @@ export interface Note {
   uid: string;
   title: string;
   content: string;
+  colorId: number
 }
 
 export default function App() {
@@ -32,6 +33,7 @@ export default function App() {
         uid: "NT-" + Math.floor(curDate.getTime() / 1000),
         title: title,
         content: content,
+        colorId: 0
       }),
     })
       .then((res) => {

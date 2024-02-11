@@ -6,21 +6,25 @@ import {
 } from "../Features/Context/notesContextReduce";
 
 interface dataType {
-  idColor: number;
-  colorName: string;
-  noteId?: string;
+  colorId: number;
+  uid?: string;
 }
+
+const Theme = [
+  'white',
+  'red-300',
+  'blue-300',
+  'green-300'
+]
 
 export default function Notes() {
   const { notes, setNotes } = useContext<NotesContextProps>(notesContext);
   const [filtredNotes, setFiltredNotes] = useState<Array<Note> | undefined>();
   const [colorBar, toggleColorBar] = useState<boolean>(false);
-  const [color, pickColor] = useState<Array<dataType>>([
-    { idColor: 0, colorName: "border-white" },
-  ]);
+  const [color, pickColor] = useState<Array<dataType>>([]);
 
   useEffect(() => {
-    console.log('updated state', [...notes as []]);
+    // console.log('updated state', [...notes as []]);
     setFiltredNotes([...notes as []]);
   }, [notes]);
 
@@ -51,16 +55,47 @@ export default function Notes() {
       });
 
     const filteredColorSet: Array<dataType> = color?.filter(
-      (color: dataType) => color.noteId !== noteId
+      (color: dataType) => color.uid !== noteId
     );
     pickColor(filteredColorSet);
   };
 
+  const updateNote = (noteId: string, data: dataType) => {
+    fetch(`http://localhost:3000/update-note`, {  
+    method: "put",
+    headers: {
+      "content-type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({
+        uid: noteId,
+        ...data
+      })
+    })
+  }
+
   const changeNoteColor = (noteColor: dataType) => {
-    const filteredColorSet: Array<dataType> = color?.filter(
-      (color: dataType) => color.noteId !== noteColor?.noteId
-    );
-    pickColor([...filteredColorSet, noteColor]);
+    // const filteredColorSet: Note[] = notes?.filter(
+    //   (color: dataType) => color.uid !== noteColor?.uid
+    // ) as [];
+    updateNote(noteColor.uid as string, { colorId: noteColor.colorId })
+    const newNote: Note[] = [];
+    notes?.map(note => {
+      if (note.uid === noteColor.uid) {
+        newNote.push({
+          ...note,
+          colorId: noteColor.colorId
+        }) 
+      } else {
+        newNote.push({
+          ...note
+        }) 
+      }
+    })
+
+    setNotes(newNote)
+    // pickColor([...filteredColorSet, noteColor]);
+    
   };
 
   return filtredNotes?.map((note, i) => (
@@ -69,9 +104,9 @@ export default function Notes() {
       className='relative flex-[1_1_15rem] w-60 max-w-[16rem] group/globle h-60 max-h-60'
     >
       <div
-        className={`bg-[#3d3d3d] rounded-md p-3 w-full h-full ${
-          color?.find((c) => c.noteId === note.uid) &&
-          color?.find((c) => c.noteId === note.uid)?.colorName
+        className={`bg-[#3d3d3d] rounded-md p-3 w-full h-full border-${
+          notes?.find((c) => c.uid === note.uid) &&
+          Theme[notes?.find((c) => c.uid === note.uid)?.colorId as number]
         } border-t-4 group/close-cross group-hover/globle:border-t-[20px] box-border transition-all`}
       >
         <div
@@ -107,53 +142,49 @@ export default function Notes() {
           >
             <span
               className={`w-2.5 h-2.5 bg-white rounded-full cursor-pointer outline-1 ${
-                color?.find((c) => c.idColor === 0 && c.noteId === note.uid) &&
+                notes?.find((c) => c.colorId === 0 && c.uid === note.uid) &&
                 "outline"
               } outline-offset-1`}
               onClick={() =>
                 changeNoteColor({
-                  idColor: 0,
-                  colorName: "border-white",
-                  noteId: note.uid,
+                  colorId: 0,
+                  uid: note.uid,
                 })
               }
             ></span>
             <span
               className={`w-2.5 h-2.5 bg-red-300 rounded-full cursor-pointer outline-1 ${
-                color?.find((c) => c.idColor === 1 && c.noteId === note.uid) &&
+                notes?.find((c) => c.colorId === 1 && c.uid === note.uid) &&
                 "outline"
               } outline-offset-1`}
               onClick={() =>
                 changeNoteColor({
-                  idColor: 1,
-                  colorName: "border-red-300",
-                  noteId: note.uid,
+                  colorId: 1,
+                  uid: note.uid,
                 })
               }
             ></span>
             <span
               className={`w-2.5 h-2.5 bg-blue-300 rounded-full cursor-pointer outline-1 ${
-                color?.find((c) => c.idColor === 2 && c.noteId === note.uid) &&
+                notes?.find((c) => c.colorId === 2 && c.uid === note.uid) &&
                 "outline"
               } outline-offset-1`}
               onClick={() =>
                 changeNoteColor({
-                  idColor: 2,
-                  colorName: "border-blue-300",
-                  noteId: note.uid,
+                  colorId: 2,
+                  uid: note.uid,
                 })
               }
             ></span>
             <span
               className={`w-2.5 h-2.5 bg-green-300 rounded-full cursor-pointer outline-1 ${
-                color?.find((c) => c.idColor === 3 && c.noteId === note.uid) &&
+                notes?.find((c) => c.colorId === 3 && c.uid === note.uid) &&
                 "outline"
               } outline-offset-1`}
               onClick={() =>
                 changeNoteColor({
-                  idColor: 3,
-                  colorName: "border-green-300",
-                  noteId: note.uid,
+                  colorId: 3,
+                  uid: note.uid,
                 })
               }
             ></span>
